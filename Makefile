@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install install-front install-admin install-server \
+.PHONY: help install install-front install-admin install-server export-recipes-json \
 	dev-h5 dev-weixin dev-admin dev-server migrate test lint check \
 	build build-h5 build-weixin build-admin import-recipes
 
@@ -17,6 +17,7 @@ help:
 		'  make lint            Run backend lint checks' \
 		'  make check           Run all backend checks' \
 		'  make build           Build H5, Mini Program and admin' \
+		'  make export-recipes-json  Export normalized cookbook JSON' \
 		'  make import-recipes  Rebuild cookbook data from local sources'
 
 install: install-front install-admin install-server
@@ -31,7 +32,7 @@ install-server:
 	cd server && uv sync
 
 dev-h5:
-	npm --prefix front run dev:h5
+	npm --prefix front run dev:h5 -- --host 127.0.0.1
 
 dev-weixin:
 	npm --prefix front run dev:mp-weixin
@@ -68,5 +69,10 @@ build-weixin:
 build-admin:
 	npm --prefix admin run build
 
+export-recipes-json:
+	npm --prefix front run export:recipes-json
+
 import-recipes:
 	npm --prefix front run import:recipes
+	npm --prefix front run export:recipes-json
+	cd server && uv run python manage.py import_recipes --file data/recipes.json --publish

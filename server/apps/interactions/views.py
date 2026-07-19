@@ -1,7 +1,8 @@
 from django.db import transaction
 from django.db.models import Count, F, Q
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -41,8 +42,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         queryset = Comment.objects.select_related("user")
         if not self.request.user.is_staff:
             queryset = queryset.filter(status=Comment.Status.VISIBLE)
-        dish_id = self.request.query_params.get("dish")
-        return queryset.filter(dish_id=dish_id) if dish_id else queryset.none()
+        if self.action == "list":
+            dish_id = self.request.query_params.get("dish")
+            return queryset.filter(dish_id=dish_id) if dish_id else queryset.none()
+        return queryset
 
     def get_permissions(self):
         if self.action in {"list", "retrieve"}:
@@ -55,6 +58,14 @@ class CommentViewSet(viewsets.ModelViewSet):
         comment = serializer.save(user=self.request.user, root=root)
         Dish.objects.filter(pk=comment.dish_id).update(comment_count=F("comment_count") + 1)
 
+    def destroy(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.user_id != request.user.id and not request.user.is_staff:
+            return Response({"detail": "只能删除自己的评论。"}, status=status.HTTP_403_FORBIDDEN)
+        comment.status = Comment.Status.DELETED
+        comment.save(update_fields=["status", "updated_at"])
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def reaction(self, request, pk=None):
@@ -65,22 +76,44 @@ class CommentViewSet(viewsets.ModelViewSet):
             CommentReaction, "comment", comment, request.user, serializer.validated_data["value"]
         )
         sync_counts(comment, CommentReaction, "comment")
-        return Response(CommentSerializer(comment).data)
+        return Response(self.get_serializer(comment).data)
 
 
 class DishReactionViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
+    def retrieve(self, request, dish_id=None):
+        dish = get_object_or_404(Dish, pk=dish_id, status=Dish.Status.PUBLISHED)
+        value = (
+            DishReaction.objects.filter(dish=dish, user=request.user)
+            .values_list("value", flat=True)
+            .first()
+            or 0
+        )
+        return Response(
+            {
+                "value": value,
+                "likeCount": dish.like_count,
+                "dislikeCount": dish.dislike_count,
+            }
+        )
+
     @transaction.atomic
     def create(self, request, dish_id=None):
         serializer = ReactionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        dish = Dish.objects.get(pk=dish_id)
+        dish = get_object_or_404(Dish, pk=dish_id, status=Dish.Status.PUBLISHED)
         update_reaction(
             DishReaction, "dish", dish, request.user, serializer.validated_data["value"]
         )
         sync_counts(dish, DishReaction, "dish")
-        return Response({"likeCount": dish.like_count, "dislikeCount": dish.dislike_count})
+        return Response(
+            {
+                "value": serializer.validated_data["value"],
+                "likeCount": dish.like_count,
+                "dislikeCount": dish.dislike_count,
+            }
+        )
 
 
 class ReportViewSet(viewsets.ModelViewSet):

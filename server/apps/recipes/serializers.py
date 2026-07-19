@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from apps.dishes.models import Dish
+from apps.dishes.serializers import TagSerializer
+
 from .models import RecipeArticle, RecipeIngredient, RecipeStep, RecipeVersion
 
 
@@ -59,3 +62,42 @@ class RecipeArticleSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "current_version", "published_at", "updated_at"]
+
+
+class AdminRecipeArticleSerializer(RecipeArticleSerializer):
+    latest_version = serializers.SerializerMethodField()
+
+    class Meta(RecipeArticleSerializer.Meta):
+        fields = RecipeArticleSerializer.Meta.fields + ["latest_version"]
+
+    def get_latest_version(self, obj):
+        version = obj.versions.first()
+        return RecipeVersionSerializer(version).data if version else None
+
+
+class PublicDishSummarySerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source="category.name", read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Dish
+        fields = [
+            "id",
+            "legacy_id",
+            "name",
+            "slug",
+            "category",
+            "category_name",
+            "tags",
+            "cover_url",
+            "source_project",
+            "source_path",
+            "source_url",
+            "like_count",
+            "dislike_count",
+            "comment_count",
+        ]
+
+
+class PublicRecipeArticleSerializer(RecipeArticleSerializer):
+    dish = PublicDishSummarySerializer(read_only=True)

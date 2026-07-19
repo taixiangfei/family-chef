@@ -1,21 +1,33 @@
 from django.db import transaction
 from django.db.models import Count, Max
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from apps.dishes.models import Dish
+
 from .models import RecipeArticle, RecipeVersion
-from .serializers import RecipeArticleSerializer, RecipeVersionSerializer
+from .serializers import (
+    AdminRecipeArticleSerializer,
+    PublicRecipeArticleSerializer,
+    RecipeVersionSerializer,
+)
 
 
 class AdminRecipeArticleViewSet(viewsets.ModelViewSet):
     queryset = (
         RecipeArticle.objects.select_related("dish", "current_version")
-        .prefetch_related("current_version__ingredients", "current_version__steps")
+        .prefetch_related(
+            "current_version__ingredients",
+            "current_version__steps",
+            "versions__ingredients",
+            "versions__steps",
+        )
         .annotate(version_count=Count("versions"))
     )
-    serializer_class = RecipeArticleSerializer
+    serializer_class = AdminRecipeArticleSerializer
     permission_classes = [permissions.IsAdminUser]
     search_fields = ["title", "dish__name"]
     filterset_fields = ["status", "dish"]
@@ -85,9 +97,21 @@ class AdminRecipeArticleViewSet(viewsets.ModelViewSet):
 
 class PublicRecipeDetailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = (
-        RecipeArticle.objects.filter(status=RecipeArticle.Status.PUBLISHED)
+        RecipeArticle.objects.filter(
+            status=RecipeArticle.Status.PUBLISHED,
+            dish__status=Dish.Status.PUBLISHED,
+        )
         .select_related("dish", "dish__category", "current_version")
         .prefetch_related("dish__tags", "current_version__ingredients", "current_version__steps")
     )
-    serializer_class = RecipeArticleSerializer
+    serializer_class = PublicRecipeArticleSerializer
     permission_classes = [permissions.AllowAny]
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path=r"by-legacy/(?P<legacy_id>[^/.]+)",
+    )
+    def by_legacy(self, request, legacy_id=None):
+        article = get_object_or_404(self.get_queryset(), dish__legacy_id=legacy_id)
+        return Response(self.get_serializer(article).data)

@@ -1,5 +1,8 @@
 <template>
   <view class="page">
+    <view class="account-bar">
+      <button class="account-button" @tap="openAccount">{{ accountLabel }}</button>
+    </view>
     <view class="hero">
       <view class="hero-copy">
         <text class="eyebrow">Family Chef</text>
@@ -33,6 +36,9 @@
       </button>
     </scroll-view>
 
+    <view v-if="loading" class="data-status">正在加载最新菜谱...</view>
+    <view v-else-if="notice" class="data-status">{{ notice }}</view>
+
     <view class="section-head">
       <text class="section-title">今日可做</text>
       <text class="section-meta">{{ filteredRecipes.length }} 个教程</text>
@@ -60,6 +66,10 @@
       <text class="empty-title">暂时没找到</text>
       <text class="empty-text">换个菜名、食材或做法试试。</text>
     </view>
+
+    <button v-if="apiMode && hasMore" class="load-more" :disabled="loadingMore" @tap="loadMore">
+      {{ loadingMore ? '正在加载...' : '加载更多' }}
+    </button>
 
     <view class="knowledge">
       <view class="section-head compact">
@@ -89,30 +99,33 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { categoryTabs, recipes, skills, sourceProjects } from '../../utils/cookbook'
+import { computed, onMounted, ref, watch } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { categoryTabs as staticCategoryTabs, recipes as staticRecipes, skills, sourceProjects } from '../../utils/cookbook'
+import { getCategories, getDishes } from '../../services/recipe-api'
+import { filterStaticRecipes, mapCategories, mapDishToRecipe } from '../../services/recipe-adapter'
+import { getAccessToken, getCurrentUser } from '../../services/auth-storage'
 
 const keyword = ref('')
 const activeCategory = ref('all')
+const recipes = ref(staticRecipes)
+const categoryTabs = ref(staticCategoryTabs)
+const loading = ref(false)
+const loadingMore = ref(false)
+const notice = ref('')
+const apiMode = ref(false)
+const hasMore = ref(false)
+const currentPage = ref(1)
+const currentUser = ref(getCurrentUser())
+let requestSequence = 0
+let searchTimer
+
+const accountLabel = computed(() => currentUser.value?.nickname || currentUser.value?.username || '登录')
 
 const filteredRecipes = computed(() => {
-  const query = keyword.value.trim().toLowerCase()
-
-  return recipes.filter((recipe) => {
-    const categoryMatched = activeCategory.value === 'all' || recipe.category === activeCategory.value
-    const searchText = [
-      recipe.title,
-      recipe.summary,
-      recipe.method,
-      recipe.difficulty,
-      recipe.source,
-      ...recipe.tags,
-      ...recipe.ingredients
-    ]
-      .join(' ')
-      .toLowerCase()
-    return categoryMatched && (!query || searchText.includes(query))
-  })
+  return apiMode.value
+    ? recipes.value
+    : filterStaticRecipes(staticRecipes, keyword.value, activeCategory.value)
 })
 
 function onSearchInput(event) {
@@ -126,10 +139,83 @@ function openRecipe(id) {
 }
 
 function openRandom() {
-  const pool = filteredRecipes.value.length > 0 ? filteredRecipes.value : recipes
+  const pool = filteredRecipes.value.length > 0 ? filteredRecipes.value : staticRecipes
   const recipe = pool[Math.floor(Math.random() * pool.length)]
   openRecipe(recipe.id)
 }
+
+function openAccount() {
+  uni.navigateTo({
+    url: getAccessToken() ? '/pages/profile/index' : '/pages/auth/login'
+  })
+}
+
+async function loadCategories() {
+  try {
+    const categories = await getCategories()
+    if (Array.isArray(categories) && categories.length) {
+      categoryTabs.value = mapCategories(categories)
+    }
+  } catch {
+    // Static category tabs remain available when the API is offline.
+  }
+}
+
+async function loadDishes({ append = false } = {}) {
+  const sequence = ++requestSequence
+  const page = append ? currentPage.value + 1 : 1
+  if (append) loadingMore.value = true
+  else loading.value = true
+
+  try {
+    const data = await getDishes({
+      search: keyword.value.trim(),
+      category: activeCategory.value === 'all' ? '' : activeCategory.value,
+      page,
+      pageSize: 100
+    })
+    if (sequence !== requestSequence) return
+    const items = (data.results || data).map(mapDishToRecipe)
+    recipes.value = append ? [...recipes.value, ...items] : items
+    currentPage.value = page
+    hasMore.value = Boolean(data.next)
+    apiMode.value = true
+    notice.value = ''
+  } catch {
+    if (sequence !== requestSequence) return
+    if (!append) {
+      recipes.value = staticRecipes
+      apiMode.value = false
+      hasMore.value = false
+      notice.value = '在线菜谱暂时不可用，当前使用本地菜谱。'
+    } else {
+      notice.value = '加载更多失败，请稍后重试。'
+    }
+  } finally {
+    if (sequence === requestSequence) {
+      loading.value = false
+      loadingMore.value = false
+    }
+  }
+}
+
+function loadMore() {
+  if (!loadingMore.value && hasMore.value) loadDishes({ append: true })
+}
+
+function scheduleSearch() {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => loadDishes(), 300)
+}
+
+watch([keyword, activeCategory], scheduleSearch)
+onMounted(() => {
+  loadCategories()
+  loadDishes()
+})
+onShow(() => {
+  currentUser.value = getCurrentUser()
+})
 </script>
 
 <style scoped>
@@ -137,6 +223,23 @@ function openRandom() {
   min-height: 100vh;
   padding: 28rpx 28rpx 56rpx;
   background: #f7f4ee;
+}
+
+.account-bar {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 52rpx;
+}
+
+.account-button {
+  min-width: 104rpx;
+  height: 52rpx;
+  padding: 0 18rpx;
+  border: 2rpx solid #d8ccb9;
+  border-radius: 8rpx;
+  color: #254f47;
+  font-size: 23rpx;
+  font-weight: 700;
 }
 
 .hero {
@@ -269,6 +372,13 @@ function openRandom() {
   text-align: right;
 }
 
+.data-status {
+  margin-top: 16rpx;
+  color: #8b7d6a;
+  font-size: 23rpx;
+  line-height: 1.4;
+}
+
 .recipe-grid {
   display: flex;
   flex-direction: column;
@@ -363,6 +473,16 @@ function openRandom() {
   margin-top: 12rpx;
   color: #766e63;
   font-size: 26rpx;
+}
+
+.load-more {
+  width: 260rpx;
+  height: 72rpx;
+  margin: 28rpx auto 0;
+  border: 2rpx solid #d9cbb8;
+  border-radius: 8rpx;
+  color: #254f47;
+  font-size: 25rpx;
 }
 
 .knowledge {

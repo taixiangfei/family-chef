@@ -1,4 +1,6 @@
-from django.db.models import Count
+from uuid import UUID
+
+from django.db.models import Count, Q
 from rest_framework import permissions, viewsets
 
 from .models import Dish, DishCategory, Tag
@@ -6,6 +8,7 @@ from .serializers import (
     CategorySerializer,
     DishListSerializer,
     DishWriteSerializer,
+    PublicDishSerializer,
     TagSerializer,
 )
 
@@ -28,15 +31,29 @@ class PublicTagViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PublicDishViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = (
-        Dish.objects.filter(status=Dish.Status.PUBLISHED)
-        .select_related("category")
+        Dish.objects.filter(status=Dish.Status.PUBLISHED, article__status="published")
+        .select_related("category", "article", "article__current_version")
         .prefetch_related("tags")
     )
-    serializer_class = DishListSerializer
+    serializer_class = PublicDishSerializer
     permission_classes = [permissions.AllowAny]
     search_fields = ["name", "source_project", "tags__name"]
-    filterset_fields = ["category", "tags"]
+    filterset_fields = ["tags"]
     ordering_fields = ["updated_at", "like_count", "comment_count", "name"]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category = self.request.query_params.get("category")
+        if category:
+            category_filter = Q(category__key=category)
+            try:
+                UUID(category)
+            except ValueError:
+                pass
+            else:
+                category_filter |= Q(category_id=category)
+            queryset = queryset.filter(category_filter)
+        return queryset
 
 
 class AdminCategoryViewSet(viewsets.ModelViewSet):

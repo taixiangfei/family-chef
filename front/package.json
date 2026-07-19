@@ -6,6 +6,7 @@
   "scripts": {
     "assets": "node scripts/generate-thumbnails.mjs",
     "import:recipes": "node scripts/import-recipes.mjs",
+    "export:recipes-json": "node scripts/export-recipes-json.mjs",
     "dev:h5": "uni",
     "build:h5": "uni build",
     "dev:mp-weixin": "uni -p mp-weixin",

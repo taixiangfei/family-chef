@@ -12,7 +12,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path(
         "dishes/<uuid:dish_id>/reaction/",
-        DishReactionViewSet.as_view({"post": "create"}),
+        DishReactionViewSet.as_view({"get": "retrieve", "post": "create"}),
         name="dish-reaction",
     ),
 ]

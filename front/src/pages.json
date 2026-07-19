@@ -15,6 +15,30 @@
         "navigationBarBackgroundColor": "#fffaf2",
         "navigationBarTextStyle": "black"
       }
+    },
+    {
+      "path": "pages/auth/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/auth/register",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
     }
   ],
   "globalStyle": {

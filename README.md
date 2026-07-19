@@ -31,6 +31,8 @@ family-chef/
 ```bash
 make install
 make migrate
+make export-recipes-json
+cd server && uv run python manage.py import_recipes --file data/recipes.json --publish
 make dev-server
 make dev-admin
 make dev-h5
@@ -38,6 +40,26 @@ make dev-h5
 
 更多命令执行 `make help` 查看。各子项目的具体说明参见
 `admin/README.md`、`server/README.md` 和 `docs/backend-admin-plan.md`。
+
+## 本地访问地址
+
+启动对应服务后，可通过以下地址访问：
+
+| 端 | 地址 | 启动命令 |
+| --- | --- | --- |
+| 用户端 H5 | http://127.0.0.1:5173/ | `make dev-h5` |
+| 管理端 | http://127.0.0.1:5174/ | `make dev-admin` |
+| 后端 API | http://127.0.0.1:8000/api/v1/ | `make dev-server` |
+| API 文档 | http://127.0.0.1:8000/api/docs/ | `make dev-server` |
+| Django Admin | http://127.0.0.1:8000/django-admin/ | `make dev-server` |
+
+H5 开发服务如果检测到端口占用，Vite 会自动切换端口，请以终端输出为准。
+
+微信小程序没有浏览器访问地址，执行 `make build-weixin` 后，使用微信开发者工具导入：
+
+```text
+front/dist/build/mp-weixin/
+```
 
 ## 依赖策略
 
