@@ -1,0 +1,21 @@
+{
+  "name": "家常主厨",
+  "appid": "__UNI__FAMILY_CHEF",
+  "description": "面向 H5 和小程序的家常做菜教程。",
+  "versionName": "0.1.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "wxd426e8aeddb5aee5",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true
+  },
+  "h5": {
+    "title": "家常主厨",
+    "router": {
+      "mode": "hash"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "家常主厨",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/recipe/detail",
+      "style": {
+        "navigationBarTitleText": "做菜教程",
+        "navigationBarBackgroundColor": "#fffaf2",
+        "navigationBarTextStyle": "black"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "家常主厨",
+    "navigationBarBackgroundColor": "#f7f4ee",
+    "backgroundColor": "#f7f4ee"
+  },
+  "easycom": {
+    "autoscan": true
+  }
+}
