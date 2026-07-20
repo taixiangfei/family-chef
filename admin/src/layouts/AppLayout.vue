@@ -67,6 +67,7 @@ import {
   FileText,
   FolderTree,
   LayoutDashboard,
+  ListChecks,
   MessageSquare,
   PanelLeftClose,
   PanelLeftOpen,
@@ -87,6 +88,7 @@ const menu = [
   { path: '/dishes', label: '菜品管理', icon: Soup },
   { path: '/taxonomy', label: '分类与标签', icon: FolderTree },
   { path: '/articles', label: '教程内容', icon: FileText },
+  { path: '/meal-plans', label: '配菜方案', icon: ListChecks },
   { path: '/comments', label: '评论审核', icon: MessageSquare },
   { path: '/reports', label: '举报处理', icon: CircleAlert }
 ]

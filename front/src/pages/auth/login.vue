@@ -28,6 +28,7 @@
 import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref } from 'vue'
 import { login } from '../../services/auth-api'
+import { openAfterAuth } from '../../services/navigation'
 
 const form = reactive({ username: '', password: '' })
 const loading = ref(false)
@@ -54,7 +55,7 @@ async function submit() {
   error.value = ''
   try {
     await login(form.username.trim(), form.password)
-    uni.reLaunch({ url: nextUrl.value })
+    openAfterAuth(nextUrl.value)
   } catch (cause) {
     error.value = messageFromError(cause)
   } finally {
@@ -63,7 +64,7 @@ async function submit() {
 }
 
 function goBack() {
-  uni.navigateBack({ fail: () => uni.reLaunch({ url: '/pages/index/index' }) })
+  uni.navigateBack({ fail: () => uni.switchTab({ url: '/pages/index/index' }) })
 }
 
 function goRegister() {

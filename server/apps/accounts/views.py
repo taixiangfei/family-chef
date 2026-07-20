@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers, viewsets
+from rest_framework import generics, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
@@ -93,6 +93,46 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class MeCommentsView(generics.ListAPIView):
+    def get_queryset(self):
+        from apps.interactions.models import Comment
+
+        return Comment.objects.filter(user=self.request.user).select_related("dish", "user")
+
+    def get_serializer_class(self):
+        from apps.interactions.serializers import CommentSerializer
+
+        return CommentSerializer
+
+
+class MeReportsView(generics.ListAPIView):
+    def get_queryset(self):
+        from apps.interactions.models import ContentReport
+
+        return ContentReport.objects.filter(reporter=self.request.user).select_related(
+            "reporter", "handled_by"
+        )
+
+    def get_serializer_class(self):
+        from apps.interactions.serializers import ReportSerializer
+
+        return ReportSerializer
+
+
+class MeMealPlansView(generics.ListAPIView):
+    def get_queryset(self):
+        from apps.meal_plans.models import MealPlan
+
+        return MealPlan.objects.filter(
+            user=self.request.user, status=MealPlan.Status.SAVED
+        ).prefetch_related("items__dish__category", "items__dish__tags", "items__recipe")
+
+    def get_serializer_class(self):
+        from apps.meal_plans.serializers import MealPlanSerializer
+
+        return MealPlanSerializer
 
 
 class AdminUserViewSet(viewsets.ReadOnlyModelViewSet):

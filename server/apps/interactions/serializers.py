@@ -7,6 +7,7 @@ from .models import Comment, ContentReport
 
 class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", read_only=True)
+    dish_name = serializers.CharField(source="dish.name", read_only=True)
     user_display_name = serializers.SerializerMethodField()
     my_reaction = serializers.SerializerMethodField()
 
@@ -15,6 +16,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "dish",
+            "dish_name",
             "user",
             "username",
             "user_display_name",
@@ -71,11 +73,19 @@ class ReactionSerializer(serializers.Serializer):
 
 class ReportSerializer(serializers.ModelSerializer):
     reporter_name = serializers.CharField(source="reporter.username", read_only=True)
+    target_title = serializers.SerializerMethodField()
 
     class Meta:
         model = ContentReport
         fields = "__all__"
         read_only_fields = ["id", "reporter", "handled_by", "status", "resolution"]
+
+    def get_target_title(self, obj):
+        if obj.target_type == ContentReport.TargetType.DISH:
+            dish = Dish.objects.filter(pk=obj.target_id).first()
+            return dish.name if dish else ""
+        comment = Comment.objects.filter(pk=obj.target_id).select_related("dish").first()
+        return comment.dish.name if comment else ""
 
     def validate(self, attrs):
         target_type = attrs.get("target_type")

@@ -9,6 +9,22 @@
       }
     },
     {
+      "path": "pages/meal-plan/index",
+      "style": {
+        "navigationBarTitleText": "配菜方案",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/meal-plan/detail",
+      "style": {
+        "navigationBarTitleText": "配菜方案",
+        "navigationBarBackgroundColor": "#fffaf2",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
       "path": "pages/recipe/detail",
       "style": {
         "navigationBarTitleText": "做菜教程",
@@ -39,6 +55,30 @@
         "navigationBarBackgroundColor": "#f7f4ee",
         "navigationBarTextStyle": "black"
       }
+    },
+    {
+      "path": "pages/profile/comments",
+      "style": {
+        "navigationBarTitleText": "我的评论",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/profile/reports",
+      "style": {
+        "navigationBarTitleText": "我的举报",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/profile/meal-plans",
+      "style": {
+        "navigationBarTitleText": "我的配菜方案",
+        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarTextStyle": "black"
+      }
     }
   ],
   "globalStyle": {
@@ -49,5 +89,25 @@
   },
   "easycom": {
     "autoscan": true
+  },
+  "tabBar": {
+    "color": "#7b6f5d",
+    "selectedColor": "#254f47",
+    "backgroundColor": "#fffaf2",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/meal-plan/index",
+        "text": "配菜方案"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
   }
 }

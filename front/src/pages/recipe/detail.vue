@@ -108,6 +108,7 @@ import { getRecipeById } from '../../utils/cookbook'
 import { getRecipe } from '../../services/recipe-api'
 import { mapRecipeDetail } from '../../services/recipe-adapter'
 import { getAccessToken } from '../../services/auth-storage'
+import { openPage } from '../../services/navigation'
 import {
   createComment,
   createReport,
@@ -147,7 +148,7 @@ function requireLogin() {
     success(result) {
       if (!result.confirm) return
       const next = encodeURIComponent(`/pages/recipe/detail?id=${recipe.value.id}`)
-      uni.navigateTo({ url: `/pages/auth/login?next=${next}` })
+      openPage(`/pages/auth/login?next=${next}`)
     }
   })
   return false

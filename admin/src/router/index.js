@@ -9,6 +9,7 @@ import TaxonomyPage from '../views/TaxonomyPage.vue'
 import ArticlesPage from '../views/ArticlesPage.vue'
 import CommentsPage from '../views/CommentsPage.vue'
 import ReportsPage from '../views/ReportsPage.vue'
+import MealPlansPage from '../views/MealPlansPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +24,7 @@ const router = createRouter({
         { path: 'dishes', name: 'dishes', component: DishesPage, meta: { title: '菜品管理' } },
         { path: 'taxonomy', name: 'taxonomy', component: TaxonomyPage, meta: { title: '分类与标签' } },
         { path: 'articles', name: 'articles', component: ArticlesPage, meta: { title: '教程内容' } },
+        { path: 'meal-plans', name: 'meal-plans', component: MealPlansPage, meta: { title: '配菜方案' } },
         { path: 'comments', name: 'comments', component: CommentsPage, meta: { title: '评论审核' } },
         { path: 'reports', name: 'reports', component: ReportsPage, meta: { title: '举报处理' } }
       ]

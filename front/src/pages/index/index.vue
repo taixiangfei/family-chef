@@ -145,9 +145,11 @@ function openRandom() {
 }
 
 function openAccount() {
-  uni.navigateTo({
-    url: getAccessToken() ? '/pages/profile/index' : '/pages/auth/login'
-  })
+  if (getAccessToken()) {
+    uni.switchTab({ url: '/pages/profile/index' })
+    return
+  }
+  uni.navigateTo({ url: '/pages/auth/login?next=%2Fpages%2Fprofile%2Findex' })
 }
 
 async function loadCategories() {
@@ -221,7 +223,7 @@ onShow(() => {
 <style scoped>
 .page {
   min-height: 100vh;
-  padding: 28rpx 28rpx 56rpx;
+  padding: 28rpx 28rpx calc(120rpx + env(safe-area-inset-bottom));
   background: #f7f4ee;
 }
 
