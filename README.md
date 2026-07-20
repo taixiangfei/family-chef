@@ -1,7 +1,26 @@
 # Family Chef
 
-家常主厨采用轻量 Monorepo 管理。用户端、管理端和后端位于同一个 Git
-仓库中，但各自保留独立依赖和锁文件，不引入额外的 workspace 或任务编排框架。
+Family Chef（家常主厨）是一个面向家庭日常做饭场景的菜谱与做饭计划系统。项目将菜谱浏览、菜品详情、用户互动、做饭计划、内容管理和后端 API 放在同一个仓库中，方便从产品界面到数据服务完整迭代。
+
+用户端基于 uni-app 和 Vue 3 构建，可运行 H5，也可构建微信小程序；管理端基于 Vue 3、Vite 和 Element Plus，用于维护菜品、分类、文章、评论、举报、用户和做饭计划；后端基于 Django 5.2 和 Django REST Framework，提供账号、菜谱、菜品、互动和计划相关 API。
+
+本项目采用轻量 Monorepo 管理。用户端、管理端和后端位于同一个 Git 仓库中，但各自保留独立依赖和锁文件，不引入额外的 workspace 或任务编排框架。
+
+## 功能概览
+
+- 用户端：菜谱首页、菜品详情、登录注册、个人中心、评论互动、做饭计划。
+- 管理端：仪表盘、菜品管理、分类管理、文章管理、评论管理、举报处理、用户管理、计划管理。
+- 后端 API：JWT 账号认证、菜谱与菜品接口、用户互动接口、做饭计划接口、Django Admin、OpenAPI 文档。
+- 菜谱数据：支持从本地 HowToCook 和 CookLikeHOC 副本导入、整理并发布到后端。
+
+## 技术栈
+
+| 模块 | 技术 |
+| --- | --- |
+| 用户端 | uni-app、Vue 3、Vite、微信小程序构建 |
+| 管理端 | Vue 3、Vite、Element Plus、Axios、Vue Router |
+| 后端 | Python 3.12、Django 5.2、Django REST Framework、uv |
+| 数据导入 | Node.js 脚本、Django management command |
 
 ## 目录
 
