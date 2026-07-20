@@ -9,8 +9,8 @@ export default {
 <style>
 page {
   min-height: 100%;
-  background: #f7f4ee;
-  color: #20201d;
+  background: #f4ead8;
+  color: #2b241c;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -31,5 +31,10 @@ button {
 
 button::after {
   border: 0;
+}
+
+input,
+textarea {
+  caret-color: #c84f31;
 }
 </style>

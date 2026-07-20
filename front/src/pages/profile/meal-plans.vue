@@ -2,7 +2,7 @@
   <view class="list-page">
     <view class="page-head">
       <text class="page-title">我的配菜方案</text>
-      <text class="page-subtitle">保存过的搭配会在这里留档。</text>
+      <text class="page-subtitle">保存过的搭配会在这里留进菜单夹。</text>
     </view>
 
     <view v-if="loading" class="status">正在加载...</view>
@@ -86,17 +86,17 @@ onShow(() => load(false))
 </script>
 
 <style scoped>
-.list-page { min-height: 100vh; padding: 28rpx; background: #f7f4ee; }
-.page-head { padding: 18rpx 0 26rpx; }
-.page-title { display: block; color: #25221d; font-size: 40rpx; font-weight: 900; }
-.page-subtitle { display: block; margin-top: 10rpx; color: #766e63; font-size: 25rpx; }
-.status, .empty { padding: 70rpx 0; color: #766e63; font-size: 26rpx; text-align: center; }
+.list-page { min-height: 100vh; padding: 28rpx; background: linear-gradient(180deg, #f4ead8 0%, #fff7ea 100%); }
+.page-head { margin-bottom: 24rpx; padding: 26rpx 28rpx; border: 2rpx solid #d7b485; border-radius: 8rpx; background: #f9e4c2; }
+.page-title { display: block; color: #2b241c; font-size: 40rpx; font-weight: 900; }
+.page-subtitle { display: block; margin-top: 10rpx; color: #6a4d39; font-size: 25rpx; line-height: 1.45; }
+.status, .empty { padding: 70rpx 0; color: #7b604f; font-size: 26rpx; text-align: center; }
 .plan-list { display: flex; flex-direction: column; gap: 18rpx; }
-.plan-card { display: flex; gap: 14rpx; padding: 22rpx; border: 2rpx solid #eadfcd; border-radius: 8rpx; background: #fffaf2; }
+.plan-card { display: flex; gap: 14rpx; padding: 22rpx; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fffaf1; box-shadow: 0 6rpx 0 #ead4b4; }
 .plan-main { flex: 1; min-width: 0; text-align: left; }
-.plan-title { display: block; color: #25221d; font-size: 29rpx; font-weight: 900; }
-.plan-meta { display: block; margin-top: 10rpx; color: #c55335; font-size: 23rpx; font-weight: 800; }
-.plan-summary { display: block; margin-top: 10rpx; color: #6b6255; font-size: 24rpx; line-height: 1.45; }
-.delete-button { align-self: center; width: 96rpx; height: 58rpx; color: #b6492b; font-size: 23rpx; }
-.load-more { width: 240rpx; height: 70rpx; margin: 28rpx auto 0; border: 2rpx solid #d9cbb8; border-radius: 8rpx; color: #254f47; font-size: 25rpx; }
+.plan-title { display: block; color: #2b241c; font-size: 29rpx; font-weight: 900; }
+.plan-meta { display: block; margin-top: 10rpx; color: #c84f31; font-size: 23rpx; font-weight: 900; }
+.plan-summary { display: block; margin-top: 10rpx; color: #6a4d39; font-size: 24rpx; line-height: 1.45; }
+.delete-button { align-self: center; width: 96rpx; height: 58rpx; color: #a44d32; font-size: 23rpx; font-weight: 900; }
+.load-more { width: 240rpx; height: 72rpx; margin: 30rpx auto 0; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fffaf1; color: #1f5c4c; font-size: 25rpx; font-weight: 900; }
 </style>

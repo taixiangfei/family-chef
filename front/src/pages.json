@@ -4,7 +4,7 @@
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "家常主厨",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -12,7 +12,7 @@
       "path": "pages/meal-plan/index",
       "style": {
         "navigationBarTitleText": "配菜方案",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -20,7 +20,7 @@
       "path": "pages/meal-plan/detail",
       "style": {
         "navigationBarTitleText": "配菜方案",
-        "navigationBarBackgroundColor": "#fffaf2",
+        "navigationBarBackgroundColor": "#fff7ea",
         "navigationBarTextStyle": "black"
       }
     },
@@ -28,7 +28,7 @@
       "path": "pages/recipe/detail",
       "style": {
         "navigationBarTitleText": "做菜教程",
-        "navigationBarBackgroundColor": "#fffaf2",
+        "navigationBarBackgroundColor": "#fff7ea",
         "navigationBarTextStyle": "black"
       }
     },
@@ -36,7 +36,7 @@
       "path": "pages/auth/login",
       "style": {
         "navigationBarTitleText": "登录",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -44,7 +44,7 @@
       "path": "pages/auth/register",
       "style": {
         "navigationBarTitleText": "注册",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -52,7 +52,7 @@
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -60,7 +60,7 @@
       "path": "pages/profile/comments",
       "style": {
         "navigationBarTitleText": "我的评论",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -68,7 +68,7 @@
       "path": "pages/profile/reports",
       "style": {
         "navigationBarTitleText": "我的举报",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     },
@@ -76,7 +76,7 @@
       "path": "pages/profile/meal-plans",
       "style": {
         "navigationBarTitleText": "我的配菜方案",
-        "navigationBarBackgroundColor": "#f7f4ee",
+        "navigationBarBackgroundColor": "#f4ead8",
         "navigationBarTextStyle": "black"
       }
     }
@@ -84,16 +84,16 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "家常主厨",
-    "navigationBarBackgroundColor": "#f7f4ee",
-    "backgroundColor": "#f7f4ee"
+    "navigationBarBackgroundColor": "#f4ead8",
+    "backgroundColor": "#f4ead8"
   },
   "easycom": {
     "autoscan": true
   },
   "tabBar": {
-    "color": "#7b6f5d",
-    "selectedColor": "#254f47",
-    "backgroundColor": "#fffaf2",
+    "color": "#7b604f",
+    "selectedColor": "#1f5c4c",
+    "backgroundColor": "#fff7ea",
     "borderStyle": "black",
     "list": [
       {

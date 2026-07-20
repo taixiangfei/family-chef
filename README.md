@@ -19,6 +19,15 @@ family-chef/
 中排除。执行菜谱导入前，需要自行准备这两个目录，或通过环境变量
 `HOWTOCOOK_PATH`、`COOKLIKEHOC_PATH` 指向对应数据源。
 
+## 菜谱来源
+
+本项目菜谱内容借鉴并整理自以下 GitHub 开源项目：
+
+- HowToCook: https://github.com/Anduin2017/HowToCook
+- CookLikeHOC: https://github.com/Gar-b-age/CookLikeHOC
+
+导入脚本会从上述项目的本地副本中解析菜名、分类、材料、步骤和来源链接，并重新整理为适合用户端、管理端和后端 API 使用的数据结构。
+
 ## 环境要求
 
 - Node.js 20 或兼容版本

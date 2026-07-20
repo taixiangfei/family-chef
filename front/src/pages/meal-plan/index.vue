@@ -1,9 +1,9 @@
 <template>
   <view class="plan-page">
     <view class="hero">
-      <text class="eyebrow">Meal Plan</text>
+      <text class="eyebrow">Kitchen Board</text>
       <text class="title">今天这样搭</text>
-      <text class="subtitle">按主题、偏好或随机方式，从已发布菜谱里搭一桌可执行的方案。</text>
+      <text class="subtitle">把已有菜谱像备菜一样排开，搭出一桌有主菜、有青菜、有汤气的家常菜单。</text>
     </view>
 
     <view class="mode-tabs">
@@ -13,7 +13,7 @@
     </view>
 
     <view v-if="mode === 'theme'" class="panel">
-      <text class="panel-title">主题</text>
+      <text class="panel-title">今晚餐桌主题</text>
       <view v-if="themesLoading" class="status">正在加载主题...</view>
       <view v-else class="theme-grid">
         <button v-for="theme in themes" :key="theme.key" class="theme-card" :class="{ active: form.themeKey === theme.key }" @tap="form.themeKey = theme.key">
@@ -24,7 +24,7 @@
     </view>
 
     <view class="panel">
-      <text class="panel-title">基础设置</text>
+      <text class="panel-title">备菜设置</text>
       <view class="field-row">
         <view class="field">
           <text class="field-label">人数</text>
@@ -44,7 +44,7 @@
     </view>
 
     <view v-if="mode === 'custom'" class="panel">
-      <text class="panel-title">偏好</text>
+      <text class="panel-title">冰箱与忌口</text>
       <view class="field">
         <text class="field-label">已有食材</text>
         <input class="field-input" :value="ingredientsText" placeholder="例如：鸡蛋、番茄、豆腐" @input="ingredientsText = $event.detail.value" />
@@ -60,7 +60,7 @@
     </view>
 
     <button class="generate-button" :disabled="generating" @tap="generate">
-      {{ generating ? '生成中...' : '生成配菜方案' }}
+      {{ generating ? '正在配菜...' : '排一桌菜单' }}
     </button>
     <text v-if="notice" class="notice">{{ notice }}</text>
   </view>
@@ -156,27 +156,27 @@ onMounted(loadThemes)
 </script>
 
 <style scoped>
-.plan-page { min-height: 100vh; padding: 28rpx 28rpx calc(120rpx + env(safe-area-inset-bottom)); background: #f7f4ee; }
-.hero { padding: 22rpx 0 28rpx; }
-.eyebrow { display: block; color: #7b6f5d; font-size: 24rpx; font-weight: 800; }
-.title { display: block; margin-top: 10rpx; color: #24221f; font-size: 52rpx; font-weight: 900; line-height: 1.12; }
-.subtitle { display: block; margin-top: 16rpx; color: #676156; font-size: 27rpx; line-height: 1.55; }
-.mode-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12rpx; margin: 18rpx 0 22rpx; }
-.mode-tab { height: 72rpx; border: 2rpx solid #d9cbb8; border-radius: 8rpx; color: #5f5649; font-size: 26rpx; font-weight: 800; }
-.mode-tab.active { border-color: #254f47; background: #254f47; color: #fff; }
-.panel { margin-top: 20rpx; padding: 26rpx; border: 2rpx solid #eadfcd; border-radius: 8rpx; background: #fffaf2; }
-.panel-title { display: block; color: #25221d; font-size: 31rpx; font-weight: 900; }
-.status { padding: 24rpx 0 0; color: #766e63; font-size: 25rpx; }
-.theme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14rpx; margin-top: 20rpx; }
-.theme-card { min-height: 150rpx; padding: 20rpx; border: 2rpx solid #dfd2bf; border-radius: 8rpx; background: #fffdf8; text-align: left; }
-.theme-card.active { border-color: #c55335; background: #fff4ec; }
-.theme-name { display: block; color: #25221d; font-size: 27rpx; font-weight: 900; }
-.theme-desc { display: block; margin-top: 10rpx; color: #756a5b; font-size: 23rpx; line-height: 1.35; }
+.plan-page { min-height: 100vh; padding: 28rpx 28rpx calc(124rpx + env(safe-area-inset-bottom)); background: linear-gradient(180deg, #f4ead8 0%, #fff7ea 42%, #f6ead5 100%); }
+.hero { padding: 30rpx 28rpx; border: 2rpx solid #d7b485; border-radius: 8rpx; background: #f9e4c2; box-shadow: 0 8rpx 0 #e2c79f; }
+.eyebrow { display: block; color: #a44d32; font-size: 24rpx; font-weight: 900; }
+.title { display: block; margin-top: 10rpx; color: #2b241c; font-size: 54rpx; font-weight: 900; line-height: 1.12; }
+.subtitle { display: block; margin-top: 16rpx; color: #6a4d39; font-size: 27rpx; line-height: 1.55; }
+.mode-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12rpx; margin: 30rpx 0 22rpx; }
+.mode-tab { height: 74rpx; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fffaf1; color: #6f4a32; font-size: 26rpx; font-weight: 900; }
+.mode-tab.active { border-color: #1f5c4c; background: #1f5c4c; color: #fffaf1; }
+.panel { margin-top: 22rpx; padding: 28rpx; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fffaf1; }
+.panel-title { display: block; color: #2b241c; font-size: 31rpx; font-weight: 900; }
+.status { padding: 24rpx 0 0; color: #7b604f; font-size: 25rpx; }
+.theme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14rpx; margin-top: 22rpx; }
+.theme-card { min-height: 158rpx; padding: 20rpx; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fff7ea; text-align: left; }
+.theme-card.active { border-color: #c84f31; background: #fff0df; box-shadow: inset 0 0 0 4rpx #ffd9c8; }
+.theme-name { display: block; color: #2b241c; font-size: 27rpx; font-weight: 900; }
+.theme-desc { display: block; margin-top: 10rpx; color: #7b604f; font-size: 23rpx; line-height: 1.35; }
 .field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16rpx; }
 .field { margin-top: 22rpx; }
-.field-label { display: block; margin-bottom: 10rpx; color: #4d473f; font-size: 25rpx; font-weight: 800; }
-.field-input, .picker-value { width: 100%; height: 82rpx; padding: 0 22rpx; border: 2rpx solid #dfd2bf; border-radius: 8rpx; background: #fffdf8; color: #25221d; font-size: 28rpx; line-height: 82rpx; }
-.generate-button { height: 88rpx; margin-top: 28rpx; border-radius: 8rpx; background: #254f47; color: #fff; font-size: 29rpx; font-weight: 900; }
+.field-label { display: block; margin-bottom: 10rpx; color: #4f3a2b; font-size: 25rpx; font-weight: 900; }
+.field-input, .picker-value { width: 100%; height: 84rpx; padding: 0 22rpx; border: 2rpx solid #d8b98f; border-radius: 8rpx; background: #fff7ea; color: #2b241c; font-size: 28rpx; line-height: 84rpx; }
+.generate-button { height: 90rpx; margin-top: 30rpx; border-radius: 8rpx; background: #c84f31; color: #fffaf1; font-size: 29rpx; font-weight: 900; box-shadow: 0 7rpx 0 #91361f; }
 .generate-button[disabled] { opacity: .55; }
-.notice { display: block; margin-top: 18rpx; color: #b6492b; font-size: 24rpx; line-height: 1.45; }
+.notice { display: block; margin-top: 20rpx; padding: 14rpx 16rpx; border-left: 8rpx solid #c84f31; background: #fff0df; color: #a44d32; font-size: 24rpx; line-height: 1.45; }
 </style>
