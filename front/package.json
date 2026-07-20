@@ -1,0 +1,25 @@
+{
+  "name": "family-chef",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "node scripts/generate-thumbnails.mjs",
+    "import:recipes": "node scripts/import-recipes.mjs",
+    "dev:h5": "uni",
+    "build:h5": "uni build",
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-5010520260709002",
+    "@dcloudio/uni-components": "3.0.0-5010520260709002",
+    "@dcloudio/uni-h5": "3.0.0-5010520260709002",
+    "@dcloudio/uni-mp-weixin": "3.0.0-5010520260709002",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@dcloudio/vite-plugin-uni": "3.0.0-5010520260709002",
+    "vite": "5.2.8"
+  }
+}

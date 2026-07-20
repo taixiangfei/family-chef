@@ -1,0 +1,39 @@
+# External recipe sources (kept locally, not versioned)
+/HowToCook/
+/CookLikeHOC/
+
+# JavaScript dependencies and build output
+**/node_modules/
+**/dist/
+**/unpackage/
+**/.hbuilderx/
+
+# Python environments and generated files
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/*.sqlite3
+**/.pytest_cache/
+**/.ruff_cache/
+**/.coverage
+**/htmlcov/
+/server/media/
+/server/staticfiles/
+
+# Local environment files (examples stay versioned)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Logs and local tooling
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+.idea/
+.vscode/
